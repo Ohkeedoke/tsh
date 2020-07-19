@@ -1,0 +1,44 @@
+.navbar {
+  border-bottom: 1px solid #eee;
+  margin-bottom: 8px;
+}
+
+.gh-username img{
+  width: 32px;
+  vertical-align: middle;
+}
+
+#profile-bio{
+  margin-top: 10px;
+}
+
+.timeline .timeline-item {
+  padding-bottom: 1em;
+}
+
+.input--invalid {
+  border-color: red;
+}
+
+.wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: stretch;
+}
+
+.profile-container {
+  width: 100%;
+  padding: 25px;
+
+  @media (min-width: 768px) {
+    width: 50%;
+  }
+
+  @media (min-width: 1280px) {
+    width: 30%;
+  }
+}
+
+.events-container {
+  padding: 25px;
+}
