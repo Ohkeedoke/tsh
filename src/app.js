@@ -1,19 +1,41 @@
 import './assets/scss/app.scss';
 import $ from 'cash-dom';
 
+const inputDOM = $('.username.input');
+const loadButtonDOM = $('.load-username');
+
 
 export class App {
   initializeApp() {
-    $('.load-username').on('click', () => {
-      let userName = $('.username.input').val();
+    loadButtonDOM.on('click', () => {
 
-      fetch('https://api.github.com/users/' + userName)
-        .then(response => response.json())
-        .then(body => {
-          this.profile = body;
-          this.update_profile();
-        })
+      if (this.validation(inputDOM.val())) {
+        this.fetchData();
+      } else {
+        inputDOM.addClass('input--invalid');
+      }
+
     })
+
+    inputDOM.on('change', () => {
+      if (inputDOM.hasClass('input--invalid')) {
+        inputDOM.removeClass('input--invalid');
+      }
+    });
+  }
+
+  fetchData() {
+    fetch('https://api.github.com/users/' + inputDOM.val())
+      .then(response => response.json())
+      .then(body => {
+        this.profile = body;
+        this.update_profile();
+      })
+  }
+
+  validation(text) {
+    const pattern = new RegExp(/^(\d|[a-z]|[\w_]|[\w-])+$/);
+    return pattern.test(text);
   }
 
   update_profile() {
