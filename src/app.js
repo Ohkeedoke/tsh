@@ -5,7 +5,8 @@ import { getTemplate } from './htmlTemplates/templatesGenerator';
 const inputDOM = $('.username.input');
 const loadButtonDOM = $('.load-username');
 const userTimelineDOM = document.getElementById('user-timeline');
-
+const loaderDOM = $('#spinner');
+const profileDOM = $('.profile');
 
 export class App {
   initializeApp() {
@@ -27,23 +28,41 @@ export class App {
   }
 
   fetchData() {
+    this.toggleVisibility('pending')
     fetch('https://api.github.com/users/' + inputDOM.val())
       .then(response => response.json())
       .then(body => {
         this.profile = body;
         this.update_profile();
         this.fetchHistory();
+        this.toggleVisibility('completed')
       })
   }
 
   fetchHistory() {
+    this.toggleVisibility('pending')
     fetch(`https://api.github.com/users/${inputDOM.val()}/events/public`)
     .then(response => response.json())
     .then(body => {
       this.history = body;
-
       this.appendHistory();
+      this.toggleVisibility('completed')
     })
+  }
+
+  toggleVisibility(status) {
+    switch (status) {
+      case 'pending':
+        loaderDOM.removeClass('is-hidden');
+        profileDOM.addClass('is-hidden');
+        userTimelineDOM.classList.add('is-hidden');
+        break;
+      case 'completed':
+        loaderDOM.addClass('is-hidden');
+        profileDOM.removeClass('is-hidden');
+        userTimelineDOM.classList.remove('is-hidden');
+        break;
+    }
   }
 
   appendHistory() {
