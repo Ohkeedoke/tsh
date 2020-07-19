@@ -1,8 +1,10 @@
 import './assets/scss/app.scss';
 import $ from 'cash-dom';
+import { getTemplate } from './htmlTemplates/templatesGenerator';
 
 const inputDOM = $('.username.input');
 const loadButtonDOM = $('.load-username');
+const userTimelineDOM = document.getElementById('user-timeline');
 
 
 export class App {
@@ -30,7 +32,32 @@ export class App {
       .then(body => {
         this.profile = body;
         this.update_profile();
+        this.fetchHistory();
       })
+  }
+
+  fetchHistory() {
+    fetch(`https://api.github.com/users/${inputDOM.val()}/events/public`)
+    .then(response => response.json())
+    .then(body => {
+      this.history = body;
+
+      this.appendHistory();
+    })
+  }
+
+  appendHistory() {
+    let filteredBody = this.history.filter(el => {
+      return el.type === 'PullRequestEvent' || el.type === 'PullRequestReviewCommentEvent';
+    })
+
+    let htmlHistory = ''
+
+    for (let i = 0; i < filteredBody.length; i++) {
+      htmlHistory += getTemplate(filteredBody[i]);
+    }
+
+    userTimelineDOM.innerHTML = htmlHistory;
   }
 
   validation(text) {
