@@ -22,3 +22,26 @@
 .input--invalid {
   border-color: red;
 }
+
+.wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: stretch;
+}
+
+.profile-container {
+  width: 100%;
+  padding: 25px;
+
+  @media (min-width: 768px) {
+    width: 50%;
+  }
+
+  @media (min-width: 1280px) {
+    width: 30%;
+  }
+}
+
+.events-container {
+  padding: 25px;
+}
